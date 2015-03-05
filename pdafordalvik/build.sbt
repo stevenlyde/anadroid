@@ -8,8 +8,6 @@ version := "1.0"
 
 scalaVersion := "2.9.1"
 
-scalaSource in Compile := baseDirectory.value / "src"
-
 // set the main class for the main 'run' task
 // change Compile to Test to set it for 'test:run'
 mainClass in (Compile, run) := Some("org.ucombinator.dalvik.cfa.cesk.RunAnalysis")
