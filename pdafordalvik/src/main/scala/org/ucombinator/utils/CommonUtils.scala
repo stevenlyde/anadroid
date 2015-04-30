@@ -1,7 +1,6 @@
 package org.ucombinator.utils
 import org.ucombinator.dalvik.syntax._
 import scala.util.Random
-import scala.tools.nsc.io.Directory
 import java.io.File
 import org.ucombinator.playhelpers.PlayHelper
 //import play.api.libs.json._
@@ -568,19 +567,10 @@ object CommonUtils {
         str =>  {strBuffer.append(str + " ")})
     strBuffer.toString()
   }
-  
-  
-      
-   
-  
- 
 
-   
-    
-   
-   
-  
+  def deepFiles(f: File): Iterator[File] = {
+    val files = f.listFiles.iterator
+    files ++ files.filter(_.isDirectory).flatMap(deepFiles)
+  }
 
-  
 }
-    

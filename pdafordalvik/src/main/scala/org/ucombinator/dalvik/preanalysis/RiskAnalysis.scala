@@ -3,7 +3,6 @@ import org.ucombinator.playhelpers.AnalysisHelperThread
 import org.ucombinator.dalvik.syntax.MethodDef
 import org.ucombinator.utils.AIOptions
 import org.ucombinator.utils.StringUtils
-import scala.tools.nsc.io.Directory
 import java.io.File
 import java.io.FileWriter
 import org.ucombinator.dalvik.syntax.Stmt
@@ -157,10 +156,10 @@ object RiskAnalysis {
     // file
     val reportDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName 
   
-    val secuDir = new Directory(new File(reportDirName))
+    val secuDir = new File(reportDirName)
     if (!secuDir.exists) {
-      secuDir.createDirectory(force = true)
-      secuDir.createFile(failIfExists = false)
+      secuDir.mkdirs()
+      secuDir.createNewFile()
     }
 
       val path = opts.clsRiskRankingReportPath //stasticsDir + File.separator + CommonUtils.getStatisticsDumpFileName(opts) // or use opts.statsFilePath
@@ -245,7 +244,7 @@ object RiskAnalysis {
         })
         
         val lnNo = if(!lnStmts.isEmpty) {
-          val fst =  lnStmts.first
+          val fst =  lnStmts.head
           CommonUtils.getValue(fst.asInstanceOf[LineStmt].lnstr)
         } else 0
         
@@ -322,16 +321,16 @@ object RiskAnalysis {
                     		  "class_name" -> JsString(stmt.className),
                     		  "risk_score" -> JsNumber(stmt.riskScore),
                     		  "description" -> JsString(stmt.shortDesc))
-                    }).toList))}}).toList)
+                    }).toVector))}}).toVector)
       
       
       // file
     val reportDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName 
  
-    val secuDir = new Directory(new File(reportDirName))
+    val secuDir = new File(reportDirName)
     if (!secuDir.exists) {
-      secuDir.createDirectory(force = true)
-      secuDir.createFile(failIfExists = false)
+      secuDir.mkdirs()
+      secuDir.createNewFile()
     }
 
       val path = opts.apkProjDir + File.separator + "reports" + File.separator + "riskrank.json" // or use opts.statsFilePath
@@ -400,10 +399,10 @@ object RiskAnalysis {
     // file
     val reportDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName 
  
-    val secuDir = new Directory(new File(reportDirName))
+    val secuDir = new File(reportDirName)
     if (!secuDir.exists) {
-      secuDir.createDirectory(force = true)
-      secuDir.createFile(failIfExists = false)
+      secuDir.mkdirs()
+      secuDir.createNewFile()
     }
 
       val path = opts.methRiskRankingReportPath //stasticsDir + File.separator + CommonUtils.getStatisticsDumpFileName(opts) // or use opts.statsFilePath
@@ -484,10 +483,10 @@ object RiskAnalysis {
     // file
     val reportDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName 
  println("path is: ", reportDirName)
-    val secuDir = new Directory(new File(reportDirName))
+    val secuDir = new File(reportDirName)
     if (!secuDir.exists) {
-      secuDir.createDirectory(force = true)
-      secuDir.createFile(failIfExists = false)
+      secuDir.mkdirs()
+      secuDir.createNewFile()
     }
 
       val path = opts.riskRankingReportPath //stasticsDir + File.separator + CommonUtils.getStatisticsDumpFileName(opts) // or use opts.statsFilePath

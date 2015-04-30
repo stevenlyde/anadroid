@@ -1,6 +1,5 @@
 package org.ucombinator.dalvik.cfa.cesk
 
-import scala.tools.nsc.io.Directory
 import org.ucombinator.utils._
 import java.io.File
 import org.ucombinator.dalvik.syntax.SExp
@@ -13,7 +12,6 @@ import org.ucombinator.dalvik.syntax.NopStmt
 import org.ucombinator.dalvik.statistics.Statistics
 import org.ucombinator.playhelpers.AnalysisHelperThread
 import org.ucombinator.dalvik.cfa.widening.WideningConfiguration
- 
 
 abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
   with DalvikVMRelated
@@ -178,10 +176,10 @@ abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
     
      val heatMapDirName = opts.permReportsDirName//opts.apkProjDir + File.separator + statisticsDirName
    
-      val statDir = new Directory(new File(heatMapDirName))
+      val statDir = new File(heatMapDirName)
       if (!statDir.exists) {
-        statDir.createDirectory(force = true)
-        statDir.createFile(failIfExists = false)
+        statDir.mkdirs()
+        statDir.createNewFile()
       }
 
     
@@ -248,10 +246,10 @@ abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
 
     val stasticsDir = opts.statsDirName//opts.apkProjDir + File.separator + statisticsDirName
     println("the statistics Dir is: ", stasticsDir)
-      val statDir = new Directory(new File(stasticsDir))
+      val statDir = new File(stasticsDir)
       if (!statDir.exists) {
-        statDir.createDirectory(force = true)
-        statDir.createFile(failIfExists = false)
+        statDir.mkdirs()
+        statDir.createNewFile()
       } 
     
     
@@ -322,17 +320,17 @@ abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
     }
 
     if (opts.dumpStatistics) {
-      val statDir = new Directory(new File(statisticsDirName))
+      val statDir = new File(statisticsDirName)
       if (!statDir.exists) {
-        statDir.createDirectory(force = true)
-        statDir.createFile(failIfExists = false)
+        statDir.mkdirs()
+        statDir.createNewFile()
       }
 
       val subfolderPath = statisticsDirName + File.separator + StringUtils.trimFileName(opts.sexprDir)
-      val subfolder = new Directory(new File(subfolderPath))
+      val subfolder = new File(subfolderPath)
       if (!subfolder.exists) {
-        subfolder.createDirectory(force = true)
-        subfolder.createFile(failIfExists = false)
+        subfolder.mkdirs()
+        subfolder.createNewFile()
       }
       val path = subfolderPath + File.separator + CommonUtils.getStatisticsDumpFileName(opts)
       val file = new File(path)
@@ -351,9 +349,9 @@ abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
 
   }
 
-  private def simplefunc(pf: tools.nsc.io.File, cnt: Int) {
+  private def simplefunc(pf: File, cnt: Int) {
 
-    val fp = pf.path // path.getAbsolutePath();
+    val fp = pf.getPath // path.getAbsolutePath();
     val sexp = SExp.parseAllIn(fp)
 
     if (opts.verbose) { 
@@ -370,15 +368,13 @@ abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
     System.out.println("AnalysisRunner.parseDalvikSExprs()")
     val dirName = opts.sexprDir
 
-    val sexDir = new Directory(new File(dirName))
-    val allFileList = sexDir.deepFiles
+    val sexDir = new File(dirName)
+    val allFileList = CommonUtils.deepFiles(sexDir)
     //val valSexFileList = allFileList.filter(_.name.endsWith(".sxddx"))
     // val arrFiles = new java.io.File(dirName).listFiles.filter(_.getName.endsWith(".sxddx"))
     //println("parse file length:", allFileList.length)
 
-    val sexpFiles = allFileList.filter((f) => {
-      f.name.endsWith(".sxddx")
-    })
+    val sexpFiles = allFileList.filter(_.getName().endsWith(".sxddx"))
 
     var cnt = 0
     sexpFiles.foreach((sf) => {

@@ -1,11 +1,12 @@
 package org.ucombinator.dalvik.informationflow
-import scala.tools.nsc.io.File
+
+import java.io.File
+import scala.io.Source
 import org.ucombinator.utils.StringUtils
 import org.ucombinator.playhelpers.AnalysisHelperThread
 import models.PermissionPair
 import scala.collection.mutable.Map
 import org.ucombinator.utils.AIOptions
-import scala.tools.nsc.io.Directory
 import scala.util.matching.Regex
 
 /**
@@ -127,7 +128,7 @@ object DalInformationFlow {
 	
     def parInRankingMap : scala.collection.mutable.Map[String, Int]  = {
 	    val riskRankingPath = "data" + File.separator + "risk-rank-tmp.txt"
-	     val classLines =  File(riskRankingPath).lines.toList.filter(_.trim() !=  "" )
+	     val classLines =  Source.fromFile(riskRankingPath).getLines().filter(_.trim() !=  "" )
      val deduplicateClsLines = classLines.toSet.toList
      
      deduplicateClsLines.foldLeft(Map[String, Int]())((res, line) => {
@@ -141,7 +142,7 @@ object DalInformationFlow {
 	 private def parseInRawPermMap : scala.collection.mutable.Map[String, PermissionPair] = {
      val permMapFilePath  =  "data" + File.separator + "permission-map.txt" 
      
-     val classLines =  File(permMapFilePath).lines.toList.filter(_.trim() !=  "" )
+     val classLines =  Source.fromFile(permMapFilePath).getLines().filter(_.trim() !=  "" )
      val deduplicateClsLines = classLines.toSet.toList
      
      deduplicateClsLines.foldLeft(Map[String, PermissionPair]())((res, line) => {
@@ -249,10 +250,10 @@ object DalInformationFlow {
     
     val permReportsDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName
     if (opts.dumpStatistics) {
-      val statDir = new Directory(new File(permReportsDirName))
+      val statDir = new File(permReportsDirName)
       if (!statDir.exists) {
-        statDir.createDirectory(force = true)
-        statDir.createFile(failIfExists = false)
+        statDir.mkdirs()
+        statDir.createNewFile()
       } 
      
       val path = opts.permReportPath //stasticsDir + File.separator + CommonUtils.getStatisticsDumpFileName(opts) // or use opts.statsFilePath
@@ -279,7 +280,7 @@ object DalInformationFlow {
   
 
     // sources
-    val sourcesLines = File(srcPath).lines.toList.filter(_ != "")
+    val sourcesLines = Source.fromFile(srcPath).getLines().filter(_ != "")
     Thread.currentThread().asInstanceOf[AnalysisHelperThread].sources = sourcesLines.map((ps) => {
       val pairStr = ps.split("\\s+").toList
       (pairStr(0), pairStr(1))
@@ -287,7 +288,7 @@ object DalInformationFlow {
     }).toSet //sourcesLines.toSet 
 
     // sinks
-    val sinkLines = File(sinkPath).lines.toList.filter(_ != "")
+    val sinkLines = Source.fromFile(sinkPath).getLines().filter(_ != "")
     Thread.currentThread().asInstanceOf[AnalysisHelperThread].sinks = sinkLines.map((ps) => {
       val pairStr = ps.split("\\s+").toList
       (pairStr(0), pairStr(1))
@@ -295,7 +296,7 @@ object DalInformationFlow {
     }).toSet
 
     // sensitive string
-    val ssLines = File(sstringPath).lines.toList.filter(_ != "")
+    val ssLines = Source.fromFile(sstringPath).getLines().filter(_ != "")
     Thread.currentThread().asInstanceOf[AnalysisHelperThread].sensitiveStrings = ssLines.map((ps) => {
       val pairStr = ps.split("\\s+").toList
       val pattern = new Regex(pairStr(0))

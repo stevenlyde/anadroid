@@ -8,7 +8,6 @@ import org.ucombinator.dalvik.syntax.LabelStmt
 import scala.collection.immutable.{ Set => ImmSet, Map => ImmMap }
 import org.ucombinator.dalvik.syntax.StForEqual
 import models.PermissionPair
-import scala.tools.nsc.io.File
 import org.ucombinator.utils.CommonUtils.HeatPair
 import models.PropertyCheckList
 import org.ucombinator.dalvik.cfa.cesk.StmtForEqual

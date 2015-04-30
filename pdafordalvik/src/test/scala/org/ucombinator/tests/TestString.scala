@@ -1,7 +1,9 @@
 package org.ucombinator.tests
-import tools.nsc.io.File
+
+import java.io.File
 import scala.util.matching.Regex
 import org.ucombinator.utils.StringUtils
+import scala.io.Source
 
 object TestString {
 
@@ -22,10 +24,10 @@ object TestString {
   
   
    def main(args: Array[String]): Unit = {
-       
-       val strFilePath  =  "data" + File.separator + "str-pat.txt" 
-     
-     val classLines =  File(strFilePath).lines.toList.filter(_.trim() !=  "" )
+
+     val strFilePath  =  "data" + File.separator + "str-pat.txt"
+
+     val classLines =  Source.fromFile(strFilePath).getLines().filter(_.trim() !=  "" )
      val deduplicateClsLines = classLines.toSet.toList
      deduplicateClsLines.foreach(println)
      val map = 

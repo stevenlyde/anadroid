@@ -1,14 +1,14 @@
 package org.ucombinator.dalvik.parsing
 import org.ucombinator.utils.AIOptions
-import scala.tools.nsc.io.Directory
 import org.ucombinator.dalvik.syntax.SExp
 import java.io.File
 import scala.util.matching.Regex
+import org.ucombinator.utils.CommonUtils
 
 trait ParserHelper {
 
-    private def simplefunc(pf: tools.nsc.io.File, cnt: Int, opts:AIOptions) {
-      val fp = pf.path // path.getAbsolutePath();
+    private def simplefunc(pf: File, cnt: Int, opts:AIOptions) {
+      val fp = pf.getPath // path.getAbsolutePath();
       val sexp = SExp.parseAllIn(fp)
       S2DParser(sexp);
   }  
@@ -17,11 +17,11 @@ trait ParserHelper {
     println("parseDalvikSExprs()");
     val dirName = opts.sexprDir
 
-    val sexDir = new Directory(new File(dirName))
-    val allFileList = sexDir.deepFiles
+    val sexDir = new File(dirName)
+    val allFileList = CommonUtils.deepFiles(sexDir)
      
     val sexpFiles = allFileList.filter((f) => {
-      f.name.endsWith(".sxddx")
+      f.getName().endsWith(".sxddx")
     })
 
     var cnt = 0

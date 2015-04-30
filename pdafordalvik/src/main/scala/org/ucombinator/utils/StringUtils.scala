@@ -127,7 +127,7 @@ object StringUtils {
   def getFileNameFromClassPath(clsPath:String) : String = {
     
       val classPath = 
-        if(clsPath.contains("$")) clsPath.split("\\$").toList.first
+        if(clsPath.contains("$")) clsPath.split("\\$").toList.head
       
       else clsPath 
       

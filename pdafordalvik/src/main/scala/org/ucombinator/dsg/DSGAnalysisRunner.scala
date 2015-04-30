@@ -1,6 +1,5 @@
 package org.ucombinator.dsg
- 
-import tools.nsc.io.Directory
+
 import org.ucombinator.utils.{StringUtils, AIOptions, FancyOutput}
 import org.apache.commons.lang3.StringEscapeUtils
 import org.ucombinator.utils.CommonUtils
@@ -23,24 +22,24 @@ trait DSGAnalysisRunner extends DalvikVMRelated{
   
   // get he graph folder and created the folder if not exits
   def getGraphParentFolder(opts: AIOptions) : String = {
-      import java.io._
+    import java.io._
 
-      val apkGraphDirName = opts.graphDirName //opts.apkProjDir +  File.separator + graphsDirName
-    val graphs = new Directory(new File(apkGraphDirName))
+    val apkGraphDirName = opts.graphDirName //opts.apkProjDir +  File.separator + graphsDirName
+    val graphs = new File(apkGraphDirName)
     if (!graphs.exists) {
-      graphs.createDirectory(force = true)
-      graphs.createFile(failIfExists = false)
-    }
-     
-    val subfolderPath = apkGraphDirName //+ File.separator + StringUtils.trimFileName(opts.sexprDir)
-    val subfolder = new Directory(new File(subfolderPath))
-    if (!subfolder.exists) {
-      subfolder.createDirectory(force = true)
-      subfolder.createFile(failIfExists = false)
+      graphs.mkdirs()
+      graphs.createNewFile()
     }
 
-   subfolderPath //+ File.separator + getGraphDumpFileName(opts) 
-   
+    val subfolderPath = apkGraphDirName //+ File.separator + StringUtils.trimFileName(opts.sexprDir)
+    val subfolder = new File(subfolderPath)
+    if (!subfolder.exists) {
+      subfolder.mkdirs()
+      subfolder.createNewFile()
+    }
+
+    subfolderPath //+ File.separator + getGraphDumpFileName(opts)
+
   }
   
    //TODO:

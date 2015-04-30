@@ -1,5 +1,7 @@
 package org.ucombinator.tests
-import tools.nsc.io.File
+
+import java.io.File
+import scala.io.Source
 import org.ucombinator.utils.AIOptions
 
 object FilterData {
@@ -15,7 +17,7 @@ object FilterData {
     
      
     
-     val classLines =  File(classPath).lines.toList.filter(_ != "")
+     val classLines =  Source.fromFile(classPath).getLines().filter(_ != "")
      val deduplicateClsLines = classLines.toSet.toList
      deduplicateClsLines.foreach(println)
      
@@ -34,7 +36,7 @@ object FilterData {
   private def getSink {
       val classPath  =  "data" + File.separator + "source2.txt" 
     
-     val classLines =  File(classPath).lines.toList.filter(_ != "")
+     val classLines =  Source.fromFile(classPath).getLines().filter(_ != "")
      val deduplicateClsLines = classLines.toSet.toList
      deduplicateClsLines.foreach(println)
       

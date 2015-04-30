@@ -1,5 +1,7 @@
 package org.ucombinator.utils
-import scala.tools.nsc.io.File
+
+import java.io.File
+import scala.io.Source
 import scala.util.matching.Regex
 import org.ucombinator.playhelpers.AnalysisHelperThread
 
@@ -36,7 +38,7 @@ object AnalysisScope {
   def parseInExclusiveLibNames {//List[Regex] = {
     val strFilePath = "data" + File.separator + "libExclusions.txt"
 
-    val classLines = File(strFilePath).lines.toList.filter(_.trim() != "")
+    val classLines = Source.fromFile(strFilePath).getLines().filter(_.trim() != "")
     val deduplicateClsLines = classLines.toSet.toList
     //deduplicateClsLines.foreach(println)
 

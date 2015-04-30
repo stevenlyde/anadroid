@@ -1,7 +1,8 @@
 package org.ucombinator.dalvik.vmrelated
+
 import scala.collection.immutable.{ Set => ImmSet, Map => ImmMap}
 import scala.collection.mutable.Map
-import scala.tools.nsc.io.File
+import scala.io.Source
 
 object APISpecs extends SimpleJVMClassReportParser{
 
@@ -79,7 +80,7 @@ object APISpecs extends SimpleJVMClassReportParser{
   val apiSpecTable: Map[String, APIDesc] = Map.empty
   
   def readInReport{
-    val lines = File("data/jvm_class_report.txt").lines()
+    val lines = Source.fromFile("data/jvm_class_report.txt").getLines()
   
     lines.foreach(parseLine)
     setTempApi

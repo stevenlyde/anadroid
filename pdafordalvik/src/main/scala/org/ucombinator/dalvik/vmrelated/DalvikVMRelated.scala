@@ -1,9 +1,11 @@
 package org.ucombinator.dalvik.vmrelated
+
+import java.io.File
+import scala.io.Source
 import org.ucombinator.dalvik.syntax.{Stmt, DalvikClassDef, StmtNil, AExp,CompactMethodIndex, MethodDef, LineStmt}
 import org.ucombinator.utils.{CommonUtils, Debug}
 import org.ucombinator.utils.StringUtils
 import scala.util.Random
-import tools.nsc.io.File
 import org.ucombinator.utils.AIOptions
 import org.ucombinator.playhelpers.AnalysisHelperThread
 
@@ -87,7 +89,7 @@ trait DalvikVMRelated {
 	    val manifestFilePath = opts.apkProjDir + File.separator + "man_perms.txt" 
      
    
-     val permLines =  File(manifestFilePath).lines.toList.filter(_.trim() !=  "")
+     val permLines =  Source.fromFile(manifestFilePath).getLines().filter(_.trim() !=  "")
      val deduplicateClsLines = permLines.toSet.toList 
 	   deduplicateClsLines
 	 }
@@ -103,16 +105,16 @@ trait DalvikVMRelated {
     val entryMethPath = "data" + File.separator + "callbacks.txt"
     val xmlMethNames = opts.apkProjDir + File.separator + "handlers.txt"
 
-    val classLines = File(classPath).lines.toList.filter(_ != "")
+    val classLines = Source.fromFile(classPath).getLines().filter(_ != "")
     val deduplicateClsLines = classLines.toSet.toList
-    val entryMethLines = File(entryMethPath).lines.toList.filter(_ != "")
+    val entryMethLines = Source.fromFile(entryMethPath).getLines().filter(_ != "").toList
     val dedupMethLines = entryMethLines.toSet.toList
 
-    val handlerEntryFile = File(xmlMethNames)
+    val handlerEntryFile = new File(xmlMethNames)
     if (!handlerEntryFile.exists)
       (deduplicateClsLines, entryMethLines, List())
     else {
-      val deduplicateHandlerEntries = handlerEntryFile.lines.toList.filter(_ != "").toSet.toList
+      val deduplicateHandlerEntries = Source.fromFile(handlerEntryFile).getLines().filter(_ != "").toSet.toList
       Thread.currentThread().asInstanceOf[AnalysisHelperThread].declaredPerms = getDeclaredPerms(opts)
       (deduplicateClsLines, entryMethLines, deduplicateHandlerEntries)
     }

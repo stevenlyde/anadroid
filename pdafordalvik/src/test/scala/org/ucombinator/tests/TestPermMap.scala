@@ -1,5 +1,7 @@
 package org.ucombinator.tests
-import tools.nsc.io.File
+
+import java.io.File
+import scala.io.Source
 import scala.util.matching.Regex
 import models.PermissionPair
 import scala.collection.mutable.Map
@@ -36,7 +38,7 @@ object TestPermMap {
     private def parseInRawPermMap2 : scala.collection.mutable.Map[String, PermissionPair] = {
      val permMapFilePath  =  "data" + File.separator + "permission-map.txt" 
      
-     val classLines =  File(permMapFilePath).lines.toList.filter(_.trim() !=  "" )
+     val classLines =  Source.fromFile(permMapFilePath).getLines().filter(_.trim() !=  "" )
      val deduplicateClsLines = classLines.toSet.toList
      deduplicateClsLines.foreach(println)
      deduplicateClsLines.foldLeft(Map[String, PermissionPair]())((res, line) => {

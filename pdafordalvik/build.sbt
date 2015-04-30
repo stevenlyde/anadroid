@@ -2,11 +2,11 @@ import com.github.retronym.SbtOneJar._
 
 oneJarSettings
 
-name := "Anadroid"
+name := "anadroid"
 
 version := "1.0"
 
-scalaVersion := "2.9.1"
+scalaVersion := "2.11.6"
 
 // set the main class for the main 'run' task
 // change Compile to Test to set it for 'test:run'
@@ -30,3 +30,9 @@ javaOptions += "-Xss1536m"
 parallelExecution := false
 
 exportJars := true
+
+libraryDependencies += "io.spray" %% "spray-json" % "1.3.1"
+libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.3.2"
+libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.9"
+

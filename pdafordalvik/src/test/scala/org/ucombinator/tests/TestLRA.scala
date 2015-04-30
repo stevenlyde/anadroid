@@ -2,7 +2,6 @@ package org.ucombinator.tests
 import org.ucombinator.dalvik.preanalysis.LiveRegisterAnalysis
 import org.ucombinator.dalvik.syntax.DalvikClassDef
 import org.ucombinator.dalvik.parsing.S2DParser
-import scala.tools.nsc.io.Directory
 import java.io.File
 import org.ucombinator.dalvik.syntax.SExp
 import org.ucombinator.utils.CommonUtils
@@ -14,9 +13,9 @@ import sys.process._
 object TestLRA extends LiveRegisterAnalysis{
 
   
-   private  def simplefunc(pf: tools.nsc.io.File) {
+   private  def simplefunc(pf: File) {
    
-      val fp = pf.path// path.getAbsolutePath();
+      val fp = pf.getPath // path.getAbsolutePath();
       val sexp = SExp.parseAllIn(fp)
 
      
@@ -29,8 +28,8 @@ object TestLRA extends LiveRegisterAnalysis{
   private def parseDalvikSExprs() {
     val dirName =  "tests/sexps_smartcam"
     
-    val sexDir  = new Directory(new File(dirName))
-    val allFileList = sexDir.deepFiles
+    val sexDir  = new File(dirName)
+    val allFileList = CommonUtils.deepFiles(sexDir)
    
     allFileList.foreach(simplefunc)
 

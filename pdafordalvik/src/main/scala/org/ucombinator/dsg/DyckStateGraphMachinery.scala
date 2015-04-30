@@ -16,7 +16,6 @@ import org.ucombinator.dalvik.cfa.cesk.StateSpace
 import org.ucombinator.dalvik.syntax.Stmt
 import org.ucombinator.utils.Debug
 import org.ucombinator.utils.{ StringUtils, AIOptions, FancyOutput }
-import tools.nsc.io.Directory
 import org.ucombinator.playhelpers.AnalysisHelperThread
 import org.ucombinator.dalvik.cfa.widening.WideningConfiguration
 import org.ucombinator.dalvik.syntax.PopHandlerStmt
@@ -694,17 +693,17 @@ trait DyckStateGraphMachinery extends StateSpace {
 
     import java.io._
 
-    val graphs = new Directory(new File(graphsDirName))
+    val graphs = new File(graphsDirName)
     if (!graphs.exists) {
-      graphs.createDirectory(force = true)
-      graphs.createFile(failIfExists = false)
+      graphs.mkdirs()
+      graphs.createNewFile()
     }
 
     val subfolderPath = graphsDirName + File.separator + StringUtils.trimFileName(".")
-    val subfolder = new Directory(new File(subfolderPath))
+    val subfolder = new File(subfolderPath)
     if (!subfolder.exists) {
-      subfolder.createDirectory(force = true)
-      subfolder.createFile(failIfExists = false)
+      subfolder.mkdirs()
+      subfolder.createNewFile()
     }
 
     val path = subfolderPath + File.separator + (new java.util.Date()).getTime + ".gv"

@@ -1,63 +1,69 @@
 package org.ucombinator.dalvik.testdriver
- import scala.tools.nsc.io._
-  //import java.io._
-    import scala.actors._
-    import scala.actors.Actor._
 
-    
+import java.io.File
+import scala.concurrent.duration.DurationInt
+import scala.sys.process.stringToProcess
+import akka.actor.Actor
+import akka.actor.ActorSystem
+import akka.actor.Inbox
+import akka.actor.Props
+import akka.actor.ReceiveTimeout
+import akka.actor.actorRef2Scala
+import java.util.concurrent.TimeoutException
+
 object TestScripts {
    
  
   /**
    * NOT QUITE CONVINIENT, DEPRECIATED
    */
-    private val caller = self
-    private val WAIT_TIME = 100000
- 
-    private val reader = actor {
-        println("created actor: " + Thread.currentThread)
-        var continue = true
-        loopWhile(continue){
-            reactWithin(WAIT_TIME) {
-                case TIMEOUT =>
-                    caller ! "react timeout"
-                case proc:Process =>
-                    println("entering first actor " + Thread.currentThread)
-                    val streamReader = new java.io.InputStreamReader(proc.getInputStream)
-                    val bufferedReader = new java.io.BufferedReader(streamReader)
-                    val stringBuilder = new java.lang.StringBuilder()
-                    var line:String = null
-                    while({line = bufferedReader.readLine; line != null}){
-                        stringBuilder.append(line)
-                        stringBuilder.append("\n")  
-                    }
-                    bufferedReader.close
-                    caller ! stringBuilder.toString
-            }
+  private val WAIT_TIME = 100000
+
+  class Reader extends Actor {
+
+    context.setReceiveTimeout(WAIT_TIME millisecond)
+
+    def receive = {
+      case ReceiveTimeout =>
+        sender ! "react timeout"
+      case proc: Process =>
+        println("entering first actor " + Thread.currentThread)
+        val streamReader = new java.io.InputStreamReader(proc.getInputStream)
+        val bufferedReader = new java.io.BufferedReader(streamReader)
+        val stringBuilder = new java.lang.StringBuilder()
+        var line: String = null
+        while({line = bufferedReader.readLine; line != null}) {
+          stringBuilder.append(line)
+          stringBuilder.append("\n")
         }
+        bufferedReader.close
+        sender ! stringBuilder.toString
     }
+  }
  
-    def runSysCmd(command:String) : Int = {
+  def runSysCmd(command:String) : Int = {
         println("gonna runa a command: " + Thread.currentThread)
         val args = command.split(" ")
         val processBuilder = new ProcessBuilder(args: _* )
         processBuilder.redirectErrorStream(true)
         val proc = processBuilder.start()
-         
- 
+
+        val system = ActorSystem("system")
+        val inbox = Inbox.create(system)
+        val reader = system.actorOf(Props[Reader], "greeter")
+
         //Send the proc to the actor, to extract the console output.
         reader ! proc
  
-        //Receive the console output from the actor.
-        receiveWithin(WAIT_TIME) {
-                case TIMEOUT => { 
-                  println("receiving Timeout") 
-                  0}
-                case result:String => {
-                  println("print result")
-                  println(result)
-                  1
-                }
+        try {
+          val result = inbox.receive(WAIT_TIME millisecond)
+          println("print result")
+          println(result)
+          1
+        }
+        catch {
+          case e: TimeoutException =>
+            0
         }
     }
     // a/b/c.apk

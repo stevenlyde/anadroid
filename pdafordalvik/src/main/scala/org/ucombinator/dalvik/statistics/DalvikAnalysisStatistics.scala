@@ -71,7 +71,7 @@ ExceptionHandling{
       throw new Exception("no states to compute statistics")
     }
     else
-      states.first.getCurStore
+      states.head.getCurStore
       
     val regularStates = filterRegisterStates(states)
     val thrownStates = filterThrownStates(states)

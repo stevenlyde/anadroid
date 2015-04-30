@@ -47,7 +47,6 @@ import scala.collection.immutable.{ Set => ImmSet, Map => ImmMap }
 import org.ucombinator.utils.StringUtils
 import org.ucombinator.playhelpers.AnalysisHelperThread
 import org.ucombinator.dalvik.informationflow.DalInformationFlow
-import scala.tools.nsc.io.Directory
 import scala.util.matching.Regex
 import org.ucombinator.dalvik.cfa.widening.DalvikWideningConfiguration
 import sys.process._
@@ -371,10 +370,10 @@ class PDCFAAnalysisRunner(opts: AIOptions) extends DalvikCFARunner(opts)
 
     val stasticsDir = opts.statsDirName //opts.apkProjDir + File.separator + statisticsDirName
 
-    val statDir = new Directory(new File(stasticsDir))
+    val statDir = new File(stasticsDir)
     if (!statDir.exists) {
-      statDir.createDirectory(force = true)
-      statDir.createFile(failIfExists = false)
+      statDir.mkdirs()
+      statDir.createNewFile()
     }
 
     /* val subfolderPath = statisticsDirName + File.separator + StringUtils.trimFileName(opts.sexprDir)
@@ -442,10 +441,10 @@ class PDCFAAnalysisRunner(opts: AIOptions) extends DalvikCFARunner(opts)
 
     val stasticsDir = opts.statsDirName //opts.apkProjDir + File.separator + statisticsDirName
 
-    val statDir = new Directory(new File(stasticsDir))
+    val statDir = new File(stasticsDir)
     if (!statDir.exists) {
-      statDir.createDirectory(force = true)
-      statDir.createFile(failIfExists = false)
+      statDir.mkdirs()
+      statDir.createNewFile()
     }
 
     val path = stasticsDir + File.separator + CommonUtils.getDumpFileName(opts, "forIntentFuzzer-") // or use opts.statsFilePath
@@ -533,10 +532,10 @@ class PDCFAAnalysisRunner(opts: AIOptions) extends DalvikCFARunner(opts)
     // file
     val reportDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName 
     println("path is: ", reportDirName)
-    val secuDir = new Directory(new File(reportDirName))
+    val secuDir = new File(reportDirName)
     if (!secuDir.exists) {
-      secuDir.createDirectory(force = true)
-      secuDir.createFile(failIfExists = false)
+      secuDir.mkdirs()
+      secuDir.createNewFile()
     }
 
     val path = opts.riskRankingReportPath //stasticsDir + File.separator + CommonUtils.getStatisticsDumpFileName(opts) // or use opts.statsFilePath
@@ -560,10 +559,10 @@ class PDCFAAnalysisRunner(opts: AIOptions) extends DalvikCFARunner(opts)
     val graphFolderPath = getGraphParentFolder(opts) //
     val reportDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName
 
-    val secuDir = new Directory(new File(reportDirName))
+    val secuDir = new File(reportDirName)
     if (!secuDir.exists) {
-      secuDir.createDirectory(force = true)
-      secuDir.createFile(failIfExists = false)
+      secuDir.mkdirs()
+      secuDir.createNewFile()
     }
 
     val path = opts.securityReportPath //stasticsDir + File.separator + CommonUtils.getStatisticsDumpFileName(opts) // or use opts.statsFilePath
@@ -636,10 +635,10 @@ class PDCFAAnalysisRunner(opts: AIOptions) extends DalvikCFARunner(opts)
     val reportDirName = opts.permReportsDirName //opts.apkProjDir + File.separator + statisticsDirName
 
     buffer.append("</table></body></html>")
-    val secuDir = new Directory(new File(reportDirName))
+    val secuDir = new File(reportDirName)
     if (!secuDir.exists) {
-      secuDir.createDirectory(force = true)
-      secuDir.createFile(failIfExists = false)
+      secuDir.mkdirs()
+      secuDir.createNewFile()
     }
 
     val path = opts.securityReportPath //stasticsDir + File.separator + CommonUtils.getStatisticsDumpFileName(opts) // or use opts.statsFilePath
@@ -715,10 +714,10 @@ class PDCFAAnalysisRunner(opts: AIOptions) extends DalvikCFARunner(opts)
      buffer.append(" </body></html>")
     val stasticsDir = opts.statsDirName //opts.apkProjDir + File.separator + statisticsDirName
 
-    val statDir = new Directory(new File(stasticsDir))
+    val statDir = new File(stasticsDir)
     if (!statDir.exists) {
-      statDir.createDirectory(force = true)
-      statDir.createFile(failIfExists = false)
+      statDir.mkdirs()
+      statDir.createNewFile()
     }
   
     val path = stasticsDir + File.separator + CommonUtils.getDumpFileName2(opts, "cfg-in-text-", "html") // or use opts.statsFilePath
