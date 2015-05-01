@@ -13,15 +13,10 @@ class AIOptions {
   var apkProjDir: String = null;
   var help: Boolean = false;
   var k: Int = 1
-  var m: Int = 1
-  var printStates = true
-  var flatPolicy = "m"
-  var analysis = "flat"
   var analysisType = AnalysisType.PDCFA
   var verbose = false
   var dumpStatistics = true
   var simplifyGraph = false
-  var dummy = false
   var gc = true
   var gcDebug = false
   
@@ -33,7 +28,6 @@ class AIOptions {
   
   
   var dumpGraph = false
-  var lang = "dalvik"
   var interrupt = false
   var interruptAfter = 250
 
@@ -131,21 +125,8 @@ object AIOptions {
         parse(rest, opts)
       }
 
-      case "--lang" :: lan :: rest => {
-        lan match {
-          case "js" => opts.lang = "js"
-          case _ => opts.lang = "dalvik"
-        }
-        parse(rest, opts)
-      }
-
       case "--help" :: rest => {
         opts.help = true
-        parse(rest, opts)
-      }
-
-      case "--dummy" :: rest => {
-        opts.dummy = true
         parse(rest, opts)
       }
 
@@ -204,16 +185,6 @@ object AIOptions {
         parse(rest, opts)
       }
 
-      case "--m" :: m :: rest => {
-        opts.m = Integer.parseInt(m)
-        parse(rest, opts)
-      }
-
-      case "--flat-policy" :: s :: rest => {
-        opts.flatPolicy = s
-        parse(rest, opts)
-      }
-      
       case "--non-null-check" :: rest => {
         opts.doNotNullCheck = true
         parse(rest, opts)
@@ -262,22 +233,6 @@ object AIOptions {
          opts.printPaths = true
          parse(rest, opts)
        }
-     
-       
-      case "--analysis" :: a :: rest => {
-        opts.analysis = a
-        parse(rest, opts)
-      }
-       
-      case "--print-states" :: "true" :: rest => {
-        opts.printStates = true
-        parse(rest, opts)
-      }
-
-      case "--print-states" :: "false" :: rest => {
-        opts.printStates = false
-        parse(rest, opts)
-      }
 
       case "--dump-graph" :: rest => {
         opts.dumpGraph = true

@@ -231,7 +231,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "graph-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else ""
     val dotFilePath = prefix + arity + cfa + gc + lrv + ".dot"
@@ -252,7 +252,7 @@ object CommonUtils {
       case AnalysisType.KCFA => "-cfa"
       case AnalysisType.PDCFA => "-pdcfa"
     } 
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
     val godel = if(opts.godel) "-godel" else ""
@@ -264,7 +264,7 @@ object CommonUtils {
       case AnalysisType.KCFA => "-cfa"
       case AnalysisType.PDCFA => "-pdcfa"
     }
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if (opts.doLRA) "-lra" else ""
     val godel = if (opts.godel) "-godel" else ""
@@ -283,7 +283,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "stat-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
     val godel = if(opts.godel) "-godel" else ""
@@ -296,7 +296,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "report-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
         val godel = if(opts.godel) "-godel" else ""
@@ -309,7 +309,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "report-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
     prefix + arity + cfa + gc + lrv + "-heat-map" + ".html"
@@ -321,7 +321,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "report-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
         val godel = if(opts.godel) "-godel" else ""
@@ -334,7 +334,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "report-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
         val godel = if(opts.godel) "-godel" else ""
@@ -347,7 +347,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "report-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
         val godel = if(opts.godel) "-godel" else ""
@@ -360,7 +360,7 @@ object CommonUtils {
       case AnalysisType.PDCFA => "-pdcfa"
     }
     val prefix = "report-"
-    val arity = if (opts.dummy) "dummy" else opts.k.toString
+    val arity = opts.k.toString
     val gc = if (opts.gc) "-gc" else ""
     val lrv = if(opts.doLRA) "-lra" else "" 
         val godel = if(opts.godel) "-godel" else ""

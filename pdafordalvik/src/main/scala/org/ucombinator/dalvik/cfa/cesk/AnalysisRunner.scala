@@ -22,9 +22,6 @@ abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
 
   def k = opts.k
 
-  // what's the isDummy?
-  def isDummy = opts.dummy
-
   // when to use the simplify?
   def simplify = opts.simplifyGraph
 
@@ -68,11 +65,7 @@ abstract class AnalysisRunner(opts: AIOptions) extends FancyOutput
       case AnalysisType.PDCFA => "-PDCFA"
     }
 
-    val analysis = if (opts.dummy) {
-      "dummy"
-    } else {
-      opts.k
-    }
+    val analysis = opts.k
     val withGC = if (opts.gc) "-gc" else ""
     analysis + cfa + withGC
   }
