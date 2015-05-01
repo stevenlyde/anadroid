@@ -31,8 +31,10 @@ parallelExecution := false
 
 exportJars := true
 
-libraryDependencies += "io.spray" %% "spray-json" % "1.3.1"
-libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.3.2"
-libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3"
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.9"
+libraryDependencies ++= Seq(
+  "io.spray" %% "spray-json" % "1.3.1",
+  "org.apache.commons" % "commons-lang3" % "3.3.2",
+  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3",
+  "com.typesafe.akka" %% "akka-actor" % "2.3.9"
+)
 
