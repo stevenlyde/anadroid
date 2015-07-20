@@ -6,7 +6,7 @@ name := "anadroid"
 
 version := "1.0"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 // set the main class for the main 'run' task
 // change Compile to Test to set it for 'test:run'
@@ -32,9 +32,9 @@ parallelExecution := false
 exportJars := true
 
 libraryDependencies ++= Seq(
-  "io.spray" %% "spray-json" % "1.3.1",
-  "org.apache.commons" % "commons-lang3" % "3.3.2",
-  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3",
-  "com.typesafe.akka" %% "akka-actor" % "2.3.9"
+  "io.spray" %% "spray-json" % "1.3.2",
+  "org.apache.commons" % "commons-lang3" % "3.4",
+  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4",
+  "com.typesafe.akka" %% "akka-actor" % "2.3.12"
 )
 
