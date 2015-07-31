@@ -1,8 +1,3 @@
 package models
 
-
-
-case class JsonOutputForMethod (
-		methodLevel: SourceLocationInfo,stmts: List[SourceLocationInfo]
-
-)
+case class JsonOutputForMethod(methodLevel: SourceLocationInfo, stmts: List[SourceLocationInfo])

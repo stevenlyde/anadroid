@@ -1,40 +1,9 @@
-/*
- * CRAPL 2012.
- * U Combinator, University of Utah
- * DistriNet, KU Leuven
- *
- * THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
- * APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
- * HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT
- * WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND
- * PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE
- * DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR
- * CORRECTION.
- *
- * IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
- * WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR
- * CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
- * INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES
- * ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT
- * NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR
- * LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM
- * TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER
- * PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
- *
- * If you have questions or concerns about the CRAPL, or you need more
- * information about this license, please contact:
- *
- *    Matthew Might
- *    http://matt.might.net/
- */
-
 package org.ucombinator.dalvik.parsing
 
-import util.parsing.combinator._
-import scala.util.matching.Regex
 import org.ucombinator.dalvik.syntax._
+
+import scala.util.matching.Regex
+import scala.util.parsing.combinator._
 
 
 class SExpParser extends RegexParsers {
@@ -43,24 +12,20 @@ class SExpParser extends RegexParsers {
 
   BUG! try: "\n(a)\n"
 
-   */
+    */
 
   override def skipWhitespace = true
 
   override protected val whiteSpace = new Regex("([\\r\\n\\t ]*([;][^\\r\\n]*[\\r\\n]?)?)+")
 
   private def lpar: Parser[String] =
-    regex(new Regex("[(]")) ^^ {
-      case "(" => "("
-    }
+    regex(new Regex("[(]")) ^^ { case "(" => "(" }
 
   private def rpar: Parser[String] =
-    regex(new Regex("[)]")) ^^ {
-      case ")" => ")"
-    }
-  
+    regex(new Regex("[)]")) ^^ { case ")" => ")" }
+
   // for invoke/ranges and arguments
-   private def lrkt: Parser[String] =
+  private def lrkt: Parser[String] =
     regex(new Regex("[{]")) ^^ {
       case "{" => "("
     }
@@ -69,7 +34,7 @@ class SExpParser extends RegexParsers {
     regex(new Regex("[}]")) ^^ {
       case "}" => ")"
     }
-  
+
 
   private def integer: Parser[SExp] =
     regex(new Regex("-?[0-9]+")) ^^ {
@@ -94,27 +59,22 @@ class SExpParser extends RegexParsers {
     }
 
   private def symbol: Parser[SExp] =
-   // regex(new Regex("([^.#; \\t\\r\n()',`\"][^; \\t\\r\\n()',`\"]*|[.][^; \\t\\r\\n()',`\"]+)")) ^^ {
-    // regex(new Regex("([^.#; \\t\\r\n(){}\\[\\]',`\"][^; \\t\\r\\n(){}\\[\\]',`\"]*|[.][^; \\t\\r\\n(){}\\[\\]',`\"]+)")) ^^ {
-      regex(new Regex("([^.; \\t\\r\n(){}\\[\\]',`\"][^; \\t\\r\\n(){}\\[\\]',`\"]*|[.][^; \\t\\r\\n(){}\\[\\]',`\"]+)")) ^^ {  
-	case s => SName.from(s)
+  // regex(new Regex("([^.#; \\t\\r\n()',`\"][^; \\t\\r\\n()',`\"]*|[.][^; \\t\\r\\n()',`\"]+)")) ^^ {
+  // regex(new Regex("([^.#; \\t\\r\n(){}\\[\\]',`\"][^; \\t\\r\\n(){}\\[\\]',`\"]*|[.][^; \\t\\r\\n(){}\\[\\]',`\"]+)")) ^^ {
+    regex(new Regex("([^.; \\t\\r\n(){}\\[\\]',`\"][^; \\t\\r\\n(){}\\[\\]',`\"]*|[.][^; \\t\\r\\n(){}\\[\\]',`\"]+)")) ^^ {
+      case s => SName.from(s)
     }
-  
-  
-  private def formal: Parser[SExp] = 
-   "{" ~ sexplist ~ "}" ^^ {
-    case "{" ~ sxl ~ "}" => sxl 
-  }
-  private def emptyformal : Parser[SExp] = 
-     ("{" ~ "}") ^^ {
-      case "{" ~ "}" => SNil()
-    }
-  
-  private def objorarrtype : Parser[SExp] = 
-    "[" ~ sexplist ~ "]" ^^ {
-    case "[" ~ sxl ~ "]" => sxl 
-  }
-    
+
+
+  private def formal: Parser[SExp] =
+    "{" ~ sexplist ~ "}" ^^ { case "{" ~ sxl ~ "}" => sxl }
+
+  private def emptyformal: Parser[SExp] =
+    ("{" ~ "}") ^^ { case "{" ~ "}" => SNil() }
+
+  private def objorarrtype: Parser[SExp] =
+    "[" ~ sexplist ~ "]" ^^ { case "[" ~ sxl ~ "]" => sxl }
+
   private def keyword: Parser[SExp] =
     regex(new Regex("([#][:][^; \\t\\r\\n()',`\"]+)")) ^^ {
       case s => SKeyword.from(s.substring(2))
@@ -127,9 +87,9 @@ class SExpParser extends RegexParsers {
     } |
       regex(new Regex("\"([^\"\\\\]|\\\\.|\\\\\\\\|)*\"")) ^^ {
         case s => SText(s.substring(1, s.length() - 1))
-      } 
-    
-    //empty list
+      }
+
+  //empty list
   private def nil: Parser[SExp] =
     (lpar ~ rpar) ^^ {
       case "(" ~ ")" => SNil()
@@ -142,8 +102,8 @@ class SExpParser extends RegexParsers {
     (lpar ~ sexplist ~ rpar) ^^ {
       case "(" ~ l ~ ")" => l
     }
-  
-    //sxlist{}
+
+  //sxlist{}
   private def sxlistrkt: Parser[SExp] =
     (lrkt ~ sexplist ~ rrkt) ^^ {
       case "{" ~ l ~ "}" => l
@@ -163,13 +123,11 @@ class SExpParser extends RegexParsers {
       ("," ~ sexp) ^^ {
         case "," ~ sexp => SExp(List(CommonSSymbols.SUnquote, sexp))
       }
-  
 
 
-
-  private def sexp: Parser[SExp] = 
+  private def sexp: Parser[SExp] =
     positioned(nil | sxlist | emptyformal | formal | objorarrtype
-        | integer | sboolean | keyword | schar | text | symbol | special  )
+      | integer | sboolean | keyword | schar | text | symbol | special)
 
   private def sexplist: Parser[SExp] =
     rep(sexp) ~ (("." ~ sexp) ?) ^^ {

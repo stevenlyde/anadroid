@@ -1,11 +1,9 @@
 package org.ucombinator.utils
-import org.ucombinator.utils.AnalysisType
-import org.ucombinator.dalvik.testdriver.TestScripts
-import java.io.File
-import org.ucombinator.playhelpers.IRExtractHelper
-import sys.process._
-import scala.util.matching.Regex
 
+import java.io.File
+
+import scala.sys.process._
+import scala.util.matching.Regex
 
 class AIOptions {
 
@@ -19,34 +17,34 @@ class AIOptions {
   var simplifyGraph = false
   var gc = true
   var gcDebug = false
-  
+
   // per point widening
-  var ppw: Boolean = false 
-  var ppwFrq : Int = 2
+  var ppw: Boolean = false
+  var ppwFrq: Int = 2
   // aggresive cut off
-  var aco: Boolean  = false
-  
-  
+  var aco: Boolean = false
+
+
   var dumpGraph = false
   var interrupt = false
   var interruptAfter = 250
 
   var timeInterrupt: Boolean = false
   var interruptAfterTime: Long = 900000
-  var doLRA = false 
-  
+  var doLRA = false
+
   var godel = false
- 
+
   // currently for Android core library, not for Android apps
   var doNotNullCheck = false
   var unlinkedNonNull = false
   var initTopNull = false
-  
- // for intent fuzzer
+
+  // for intent fuzzer
   var forIntentFuzzer = false
-  
+
   var intraprocedural = false
-  
+
   var doRegex = false
   var regex: Regex = null
 
@@ -61,62 +59,62 @@ class AIOptions {
   var statsPath = ""
   var permReportPath = ""
   var heatMapReportPath = ""
-  var securityReportPath = ""  
+  var securityReportPath = ""
   var riskRankingReportPath = ""
-    
-    var clsRiskRankingReportPath = ""
-   var methRiskRankingReportPath = ""
-   var obranches = false
-   var brNum = 0
-   var brCutoff = 0
-   
-   var exception = false
-   
-   var printPaths = false
-    
+
+  var clsRiskRankingReportPath = ""
+  var methRiskRankingReportPath = ""
+  var obranches = false
+  var brNum = 0
+  var brCutoff = 0
+
+  var exception = false
+
+  var printPaths = false
+
 }
 
 object AIOptions {
 
   var debugInfo: Boolean = false
-  
-   def parseInApk(filePath0: String, doNotNull: Boolean): (String, String)  = {
+
+  def parseInApk(filePath0: String, doNotNull: Boolean): (String, String) = {
     println("filePath0", filePath0)
     val filePath = filePath0.replace(" ", "-")
     println("filePath", filePath)
-      val lst = filePath.split("/").toList
-      val plen = lst.length
-   
-      val fileParts = filePath.split("\\.apk").toList
-      val fileFoldnerName = fileParts.head 
-    
-      println("Project Name to Analyzer::::::::::::: "+ fileFoldnerName)
-      val parts = fileFoldnerName.split("/").toList
-      val l = parts.length
-      val fileName = 
-      if( l>0)
-    	  parts(l-1).replace(" ", "-")
-      else  println("WARNING: not geting APK file NAme!")
-      println("fileName", fileName)
-      
-      val pathToScript0  = lst.dropRight(1).foldLeft("")((res, s) => {res + s + "/"})
-      val pathToScript = pathToScript0.replace(" ", "-")
-      println("pathToScript", pathToScript)
-     val getIRCmdStr = if(doNotNull) {
-         "/usr/bin/python ./scripts/getIR.py" + " " + "--donull" + " " + pathToScript + " " + fileName
-       } else{
-         "/usr/bin/python ./scripts/getIR.py" + " " + "--nonull" +  " " +  pathToScript + " " + fileName
-       }
-      
-      getIRCmdStr !
-      
-      var projFolder = fileFoldnerName 
-      var  irfolder= fileFoldnerName + File.separator + "dedexout"
-      (irfolder, projFolder) 
-     
+    val lst = filePath.split("/").toList
+    val plen = lst.length
+
+    val fileParts = filePath.split("\\.apk").toList
+    val fileFoldnerName = fileParts.head
+
+    println("Project Name to Analyzer::::::::::::: " + fileFoldnerName)
+    val parts = fileFoldnerName.split("/").toList
+    val l = parts.length
+    val fileName =
+      if (l > 0)
+        parts(l - 1).replace(" ", "-")
+      else println("WARNING: not geting APK file NAme!")
+    println("fileName", fileName)
+
+    val pathToScript0 = lst.dropRight(1).foldLeft("")((res, s) => res + s + "/")
+    val pathToScript = pathToScript0.replace(" ", "-")
+    println("pathToScript", pathToScript)
+    val getIRCmdStr = if (doNotNull) {
+      "/usr/bin/python ./scripts/getIR.py" + " " + "--donull" + " " + pathToScript + " " + fileName
+    } else {
+      "/usr/bin/python ./scripts/getIR.py" + " " + "--nonull" + " " + pathToScript + " " + fileName
     }
-  
-   def parse(args: List[String], opts: AIOptions) {
+
+    getIRCmdStr !
+
+    var projFolder = fileFoldnerName
+    var irfolder = fileFoldnerName + File.separator + "dedexout"
+    (irfolder, projFolder)
+
+  }
+
+  def parse(args: List[String], opts: AIOptions) {
     println(args.toString);
     args match {
       case List() => {}
@@ -149,32 +147,32 @@ object AIOptions {
         opts.analysisType = AnalysisType.PDCFA
         parse(rest, opts)
       }
-      
+
       case "--godel" :: rest => {
         opts.godel = true
-        parse(rest,opts)
+        parse(rest, opts)
       }
 
       case "--gc" :: rest => {
         opts.gc = true
         parse(rest, opts)
       }
-      
-       case "--lra" :: rest => {
+
+      case "--lra" :: rest => {
         opts.doLRA = true
         parse(rest, opts)
       }
-       
-       case "--ppw" :: num:: rest => {
-         opts.ppw = true
-         opts.ppwFrq = Integer.parseInt(num)
-         parse(rest, opts)
-       } 
-       
-       case "--aco" ::  rest => {
-         opts.aco = true 
-         parse(rest, opts)
-       } 
+
+      case "--ppw" :: num :: rest => {
+        opts.ppw = true
+        opts.ppwFrq = Integer.parseInt(num)
+        parse(rest, opts)
+      }
+
+      case "--aco" :: rest => {
+        opts.aco = true
+        parse(rest, opts)
+      }
       case "--gcDebug" :: rest => {
         opts.gcDebug = true
         parse(rest, opts)
@@ -189,50 +187,50 @@ object AIOptions {
         opts.doNotNullCheck = true
         parse(rest, opts)
       }
-      
+
       case "--nn-unlinked" :: rest => {
-         opts.doNotNullCheck = true
-         opts.unlinkedNonNull = true
+        opts.doNotNullCheck = true
+        opts.unlinkedNonNull = true
         parse(rest, opts)
       }
 
       // this option should be after the above two
-       case "--init-topNull" :: rest => {
-        if(opts.doNotNullCheck){
-         opts.initTopNull = true
+      case "--init-topNull" :: rest => {
+        if (opts.doNotNullCheck) {
+          opts.initTopNull = true
         }
         parse(rest, opts)
-      } 
-       
-       case "--for-intent-fuzzer" :: rest => {
-    	   opts.forIntentFuzzer = true
-    	   opts.printPaths = true
-    	   parse(rest, opts)
-      } 
-       
-       case  "--intraprocedural" :: rest =>{
-         opts.intraprocedural = true
-         opts.obranches = true
-         parse(rest, opts)
-       }
-       
-       case "--obranches" :: cut:: rest => {
-    	  opts.obranches = true
-    	  opts.brCutoff = Integer.parseInt(cut)
-    	 
-         parse(rest, opts)
-       }
-       
-        case "--exceptions" ::  rest => {
-    	  opts.exception = true
-    	//  opts.intraprocedural = false
-         parse(rest, opts)
-       }
-       
-       case "--dump-paths" :: rest =>{
-         opts.printPaths = true
-         parse(rest, opts)
-       }
+      }
+
+      case "--for-intent-fuzzer" :: rest => {
+        opts.forIntentFuzzer = true
+        opts.printPaths = true
+        parse(rest, opts)
+      }
+
+      case "--intraprocedural" :: rest => {
+        opts.intraprocedural = true
+        opts.obranches = true
+        parse(rest, opts)
+      }
+
+      case "--obranches" :: cut :: rest => {
+        opts.obranches = true
+        opts.brCutoff = Integer.parseInt(cut)
+
+        parse(rest, opts)
+      }
+
+      case "--exceptions" :: rest => {
+        opts.exception = true
+        //  opts.intraprocedural = false
+        parse(rest, opts)
+      }
+
+      case "--dump-paths" :: rest => {
+        opts.printPaths = true
+        parse(rest, opts)
+      }
 
       case "--dump-graph" :: rest => {
         opts.dumpGraph = true
@@ -244,39 +242,39 @@ object AIOptions {
         opts.interruptAfter = Integer.parseInt(v)
         parse(rest, opts)
       }
-      
-       case "--interrupt-after-time" :: v :: rest => {
+
+      case "--interrupt-after-time" :: v :: rest => {
         opts.timeInterrupt = true
-        opts.interruptAfterTime = Integer.parseInt(v) * 60 *1000
+        opts.interruptAfterTime = Integer.parseInt(v) * 60 * 1000
         parse(rest, opts)
       }
-       
-      case "--regex" :: str :: rest =>{
-        opts.doRegex= true
+
+      case "--regex" :: str :: rest => {
+        opts.doRegex = true
         opts.regex = str.r
         parse(rest, opts)
       }
-      
-      case "--checklist" :: list ::rest =>{
-        opts.doCheckList= true
-        opts.checkList =  CommonUtils.parseProperties(list)
-         parse(rest, opts)
+
+      case "--checklist" :: list :: rest => {
+        opts.doCheckList = true
+        opts.checkList = CommonUtils.parseProperties(list)
+        parse(rest, opts)
       }
 
       // make the file name as the last parameter!!!
       // and so that the notnull can check if it is true or not
-     // because it will decide whether to let the disassembler to load the memory consuming odex dependencies!
+      // because it will decide whether to let the disassembler to load the memory consuming odex dependencies!
       case fileName :: rest => {
-         val fileName0 = fileName.replace(" ", "-") 
-         val (irFolder, profolder) = 
-            if(opts.doNotNullCheck) parseInApk(fileName0, true)
-            else parseInApk(fileName0, false)
-         //= parseInApk(fileName0) 
-         opts.sexprDir = irFolder  
-      
-         opts.apkProjDir = profolder 
-        
-     //   opts.sexprDir = fileName;
+        val fileName0 = fileName.replace(" ", "-")
+        val (irFolder, profolder) =
+          if (opts.doNotNullCheck) parseInApk(fileName0, true)
+          else parseInApk(fileName0, false)
+        //= parseInApk(fileName0)
+        opts.sexprDir = irFolder
+
+        opts.apkProjDir = profolder
+
+        //   opts.sexprDir = fileName;
         parse(rest, opts)
       }
 
@@ -289,4 +287,3 @@ object AIOptions {
     opts
   }
 }
-

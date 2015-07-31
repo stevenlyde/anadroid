@@ -1,11 +1,10 @@
 package org.ucombinator.dalvik.cfa.cesk
 
+import org.apache.commons.lang3.StringEscapeUtils
 import org.ucombinator.utils._
-import org.apache.commons.lang3.StringEscapeUtils 
+import org.ucombinator.domains.CommonAbstractDomains._
 
-abstract class DalvikCFARunner(opts: AIOptions) extends AnalysisRunner(opts) //with StateSpace 
-with FancyOutput  {
- import org.ucombinator.domains.CommonAbstractDomains._
+abstract class DalvikCFARunner(opts: AIOptions) extends AnalysisRunner(opts) with FancyOutput {
 
   def prettyPrintState(state: ControlState, map: Map[ControlState, Int]): String = {
     val result: String = if (simplify) {
@@ -17,20 +16,20 @@ with FancyOutput  {
       }
     } else state match {
       case p@PartialState(s, fp, store, ps, kptr, t) => {
-       map(state).toString()
-      //  (StringUtils.truncateIfLong(s.toString, 100) ) //+
+        map(state).toString()
+        //  (StringUtils.truncateIfLong(s.toString, 100) ) //+
         /*  "\\n" + " CurFP = " + fp.meth +
           "\\n" + "  store hash = " + store.hashCode().toString +
           "\\n" + kptr.toString +
           "\\n" + t.toString)*/
       }
       case FinalState(_) => "Final(" + ")"
-      case ErrorState(_, _,_) => "ErrorState"
+      case ErrorState(_, _, _) => "ErrorState"
     }
     StringEscapeUtils.escapeJava(result)
   }
-  
-    def prettyPrintState2(state: ControlState, map: Map[ControlState, Int]): String = {
+
+  def prettyPrintState2(state: ControlState, map: Map[ControlState, Int]): String = {
     val result: String = if (simplify) {
       map.get(state) match {
         case Some(n) => n.toString
@@ -40,64 +39,62 @@ with FancyOutput  {
       }
     } else state match {
       case p@PartialState(s, fp, store, ps, kptr, t) => {
-         map(state).toString + "$" + 
-         s.clsPath + "\\n" + s.methPath + "\\" + s.lineSt.toString
-         
-        
+        map(state).toString + "$" +
+          s.clsPath + "\\n" + s.methPath + "\\" + s.lineSt.toString
       }
       case FinalState(_) => "Final(" + ")"
       case ErrorState(_, _, _) => "ErrorState"
     }
     StringEscapeUtils.escapeJava(result)
   }
-  
-  private def prettyPrintStore(store: Store) : String = {
-   StringEscapeUtils.escapeJava( 
-    store.toList.foldLeft("")((res, kv) => {
-      val addr = kv._1
-      val valSet = kv._2
-     
-      res +
-      "* Addr:          " + addr + 
-      "<br>" + "* Abstract Values: " + 
-      "<br>" + "     " + valSet.toList.foldLeft("")((res2, v) => res2 + v + "</br>")+ "<br>" 
-    })
+
+  private def prettyPrintStore(store: Store): String = {
+    StringEscapeUtils.escapeJava(
+      store.toList.foldLeft("")((res, kv) => {
+        val addr = kv._1
+        val valSet = kv._2
+
+        res +
+          "* Addr:          " + addr +
+          "<br>" + "* Abstract Values: " +
+          "<br>" + "     " + valSet.toList.foldLeft("")((res2, v) => res2 + v + "</br>") + "<br>"
+      })
     )
   }
-  
-  def genPrettyStateToHtml(st: ControlState, map: Map[ControlState, Int]) : String = {
-    val result = 
+
+  def genPrettyStateToHtml(st: ControlState, map: Map[ControlState, Int]): String = {
+    val result =
       st match {
-      case p@PartialState(s, fp, store, pst, kptr, t) => {
-        
-         //println("empty valset?-----------" + pst.toString)
-        "<b>Program Insruction and Context: </b>" +  
-        (StringUtils.truncateIfLong(StringEscapeUtils.escapeJava(s.oldStyleSt.toString), 1000)) + 
-        //(StringUtils.truncateIfLong(s.toString, 1000))+
-          "<br></br>" + "<b>Current Frame Pointer is: </b>" +  (StringUtils.truncateIfLong(fp.meth.toString + fp.t, 1000)) +
-          "<br></br>" + "<b> Store Details: </b>" + 
-          "<br></br>" +
-          prettyPrintStore(store) +
-          "<br></br>" + "<b> Taint Store Details: </b>" + 
-          "<br></br>" +
-          prettyPrintStore(pst) +
-          "<br></br>" + "<b> Time: </b>"+ 
-           "<br></br>" + t.toString + 
-          "<br></br>"
+        case p@PartialState(s, fp, store, pst, kptr, t) => {
+
+          //println("empty valset?-----------" + pst.toString)
+          "<b>Program Insruction and Context: </b>" +
+            (StringUtils.truncateIfLong(StringEscapeUtils.escapeJava(s.oldStyleSt.toString), 1000)) +
+            //(StringUtils.truncateIfLong(s.toString, 1000))+
+            "<br></br>" + "<b>Current Frame Pointer is: </b>" + (StringUtils.truncateIfLong(fp.meth.toString + fp.t, 1000)) +
+            "<br></br>" + "<b> Store Details: </b>" +
+            "<br></br>" +
+            prettyPrintStore(store) +
+            "<br></br>" + "<b> Taint Store Details: </b>" +
+            "<br></br>" +
+            prettyPrintStore(pst) +
+            "<br></br>" + "<b> Time: </b>" +
+            "<br></br>" + t.toString +
+            "<br></br>"
+        }
+        case FinalState(_) => "<br></br>" + "Final(" + ")"
+        case ErrorState(_, _, _) => "<br></br>" + "ErrorState"
       }
-      case FinalState(_) => "<br></br>"+ "Final(" + ")"
-      case ErrorState(_, _, _) => "<br></br>" + "ErrorState"
-    }
     StringEscapeUtils.escapeJava(result)
   }
-  
-  
-  
+
+
   /**
    * TODO: compute statistics: singleton, points-to
    */
-  
-  /*def computeSingletons(states: Set[ControlState], exp: Exp): (Set[Var], Set[Var]) = {
+
+  /*
+  def computeSingletons(states: Set[ControlState], exp: Exp): (Set[Var], Set[Var]) = {
 
     val goodStates: Set[ControlState] = states.filter({
       case PState(_, _, _, _) => true
@@ -162,5 +159,6 @@ with FancyOutput  {
     // (vars-total, vars-singletons)
     (allVars, singletonVars)
 
-  }*/
+  }
+  */
 }

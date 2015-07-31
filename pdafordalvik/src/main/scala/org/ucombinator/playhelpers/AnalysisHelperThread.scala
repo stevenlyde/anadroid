@@ -1,30 +1,22 @@
 package org.ucombinator.playhelpers
-import org.ucombinator.dalvik.syntax.Stmt
-import org.ucombinator.utils.AIOptions
-import org.ucombinator.dalvik.cfa.pdcfa.PDCFAAnalysisRunner
-import org.ucombinator.utils.CommonUtils
-import org.ucombinator.dalvik.syntax.DalvikClassDef
-import org.ucombinator.dalvik.syntax.LabelStmt
-import scala.collection.immutable.{ Set => ImmSet, Map => ImmMap }
-import org.ucombinator.dalvik.syntax.StForEqual
+
 import models.PermissionPair
-import org.ucombinator.utils.CommonUtils.HeatPair
-import models.PropertyCheckList
-import org.ucombinator.dalvik.cfa.cesk.StmtForEqual
-import org.ucombinator.dalvik.cfa.cesk.StateSpace
-import org.ucombinator.dalvik.cfa.widening.DalvikWideningConfiguration
 import org.ucombinator.dalvik.cfa.widening.WideningHelperTrait
+import org.ucombinator.dalvik.syntax.{DalvikClassDef, LabelStmt, StForEqual, Stmt}
+import org.ucombinator.utils.AIOptions
+import org.ucombinator.utils.CommonUtils.HeatPair
+
+import scala.collection.immutable.{Map => ImmMap, Set => ImmSet}
 import scala.util.matching.Regex
-import org.ucombinator.dalvik.syntax.FieldAssignStmt
 
 // changed to support cmd line
 class AnalysisHelperThread(params: Array[String]) extends Thread with WideningHelperTrait {
 
   import org.ucombinator.domains.CommonAbstractDomains._
-  
-  
-  var exculsiveLibPatterns : List[Regex]= List[Regex]() 
-  
+
+
+  var exculsiveLibPatterns: List[Regex] = List[Regex]()
+
   // for information flow
   var sources: Set[(String, String)] = Set[(String, String)]()
   var sinks: Set[(String, String)] = Set[(String, String)]()
@@ -46,13 +38,13 @@ class AnalysisHelperThread(params: Array[String]) extends Thread with WideningHe
   //  Stmt.stmtMap += (label -> lst)}
 
   var liveMap: ImmMap[StForEqual, Set[String]] = ImmMap()
-  
+
   var nullRefMap: Map[Stmt, Int] = Map.empty
-  
+
   // for each class method, if they have intent processing fields mapping.
-  var receivingIntentProcessingMap : Map[(String, String, Stmt), Map[String, Set[IntentExtraKeyTypeAndValue]]]= Map.empty
-  
-  var reachablePaths : Set[List[Int]]= Set[List[Int]]()
+  var receivingIntentProcessingMap: Map[(String, String, Stmt), Map[String, Set[IntentExtraKeyTypeAndValue]]] = Map.empty
+
+  var reachablePaths: Set[List[Int]] = Set[List[Int]]()
   // statistics
   var noOfEdges = 0
   var noOfStates = 0
@@ -96,6 +88,7 @@ class AnalysisHelperThread(params: Array[String]) extends Thread with WideningHe
   }
 
 }
+
 /*class AnalysisHelperThread(k: Option[Int],
     gc: Option[String],
     doStateCutOff: Option[String],
@@ -118,9 +111,11 @@ class AnalysisHelperThread(params: Array[String]) extends Thread with WideningHe
 //(opts: AIOptions, initEns: List[Stmt], runner: PDCFAAnalysisRunner) 
     extends Thread{
 
-  *//**
-   * Bandage to move to multi-thread: thread local
-   *//*
+  */
+/**
+ * Bandage to move to multi-thread: thread local
+ */
+/*
   // for information flow
   var sources: Set[(String, String)] = Set[(String, String)]()
   var sinks: Set[(String, String)] = Set[(String, String)]()

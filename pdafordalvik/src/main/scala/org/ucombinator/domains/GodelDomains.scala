@@ -1,17 +1,14 @@
-/**
- * Godel Domains:
- * 	1. Denotable are a PrimeSet of Abstract values
- * 	2. Godel Store: Addr -> PrimeSet[Value]
- *  3. Godel Benv: No need right now.
- *
- * @author liangsy (shuying)
- */
-
 package org.ucombinator.domains
+
 import org.ucombinator.godelhash.impl.PrimeSet
-import org.ucombinator.dalvik.cfa.cesk.StateSpace
 import org.ucombinator.godelhash.numbertheory.PrimeTable
 
+/**
+ * Godel Domains:
+ * 1. Denotable are a PrimeSet of Abstract values
+ * 2. Godel Store: Addr -> PrimeSet[Value]
+ * 3. Godel Benv: No need right now.
+ */
 object GodelDomains {
 
   // will be added to the 
@@ -29,7 +26,7 @@ object GodelDomains {
     lazy val size = set.members.size
     lazy val toList = set.members.toList
     lazy val toSet = set.members
-    
+
     def isEmpty = size == 0
 
     def join(otherDenotable: D): D = {
@@ -64,31 +61,29 @@ object GodelDomains {
         this.toList.filter((oneV) => {
           oneV match {
             case Location |
-              FileSystem |
-              Sms |
-              Phone |
-              Picture |
-              DeviceID |
-              Network |
-              TimeOrDate |
-              SdCard |
-              Display |
-              Voice |
-              ToBeDeTermined |
-              Reflection |
-              BrowserBookmark |
-              BrowserHistory |
-              DThread |
-              IPC |
-              AMedia |
-              ASerialID |
-              AAccount |
-              ASensor |
-              AContact |
-              ARandom |
-              ADB => {
-              true
-            }
+                 FileSystem |
+                 Sms |
+                 Phone |
+                 Picture |
+                 DeviceID |
+                 Network |
+                 TimeOrDate |
+                 SdCard |
+                 Display |
+                 Voice |
+                 ToBeDeTermined |
+                 Reflection |
+                 BrowserBookmark |
+                 BrowserHistory |
+                 DThread |
+                 IPC |
+                 AMedia |
+                 ASerialID |
+                 AAccount |
+                 ASensor |
+                 AContact |
+                 ARandom |
+                 ADB => true
             case _ => false
           }
         })
@@ -123,6 +118,7 @@ object GodelDomains {
   val botBEnv = new GodelBEnv(SortedPrimeMap[Var,Loc]())*/
 
   private type StoreMap = Map[Addr, D]
+
   private object StoreElements extends PrimeTable[(Addr, Value)]
 
   case class GodelStore(val comp: BigInt, val map: Map[Addr, D]) extends Store {
@@ -172,7 +168,8 @@ object GodelDomains {
       //println("in godel hashing: after ++: ", res)
       res
     }
-    /*lds.foldLeft (this) 
+
+    /*lds.foldLeft (this)
       { case (res,(k,d)) => res + (k,d) 
       
       }*/
@@ -201,6 +198,7 @@ object GodelDomains {
     }
 
     def apply(l: Addr) = map(l)
+
     def get(l: Addr): Option[D] = map.get(l)
 
     //  def getOrElse (l : Addr, dflt : D) = map.getOrElse(l,dflt)
@@ -224,11 +222,13 @@ object GodelDomains {
       }
       d
     }
+
     def mkEmptyStore: Store = {
       botStore
     }
 
     override def hashCode() = comp.hashCode()
+
     override def equals(a: Any) = a.asInstanceOf[GodelStore].comp == comp
   }
 

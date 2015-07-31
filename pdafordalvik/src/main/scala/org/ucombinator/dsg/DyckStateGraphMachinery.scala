@@ -1,12 +1,3 @@
-/**
- * @author shuying
- * 
- * This implementation has done a lot optimization based on the IPDCFA paper (Ilya's imlp):
- * 	1. Olin's aggresive cut off - based on subsumption testing
- * 	2. The original algorithm blindly add successors to todo set, which is optimized away 
- * 	3. Of course, the godel hashing scheme really helps!
- *
- */
 
 
 package org.ucombinator.dsg
@@ -22,6 +13,12 @@ import org.ucombinator.dalvik.syntax.PopHandlerStmt
 import org.ucombinator.perfmeasure.Measure
 import org.ucombinator.domains.CommonAbstractDomains
 
+/**
+ * This implementation has done a lot optimization based on the IPDCFA paper (Ilya's imlp):
+ * 	1. Olin's aggresive cut off - based on subsumption testing
+ * 	2. The original algorithm blindly add successors to todo set, which is optimized away
+ * 	3. Of course, the godel hashing scheme really helps!
+ */
 trait DyckStateGraphMachinery extends StateSpace {
   self: GarbageCollectorTrait with FancyOutput with WideningConfiguration =>
 

@@ -1,17 +1,13 @@
-/**
- *  @author shuying
- */
+package org.ucombinator.godelhash.numbertheory
 
-package  org.ucombinator.godelhash.numbertheory;
 import org.ucombinator.playhelpers.AnalysisHelperThread
 
-
 trait PrimeHashable {
-  def primeHash : BigInt // Must be a prime.
+  def primeHash: BigInt // Must be a prime.
 }
 
 trait CompositeHashable {
-  def compositeHash : BigInt // Composite representing all components
+  def compositeHash: BigInt // Composite representing all components
 }
 
 
@@ -20,21 +16,21 @@ trait PrimeTable[A] {
   import scala.collection.mutable.HashMap
 
   /**
- * The primes is referenced from thread local.
- */
+   * The primes is referenced from thread local.
+   */
   var current = //Primes.primes
     Thread.currentThread().asInstanceOf[AnalysisHelperThread].Primes.primes
 
-  private def nextPrime : BigInt = {
+  private def nextPrime: BigInt = {
     val p = current.head
     current = current.tail
     p
   }
 
-  private var primeOf : HashMap[A, BigInt] = new HashMap[A, BigInt]
-  private var objectOf : HashMap[BigInt, A] = new HashMap[BigInt, A]
+  private var primeOf: HashMap[A, BigInt] = new HashMap[A, BigInt]
+  private var objectOf: HashMap[BigInt, A] = new HashMap[BigInt, A]
 
-  def prime(a : A) : BigInt = {
+  def prime(a: A): BigInt = {
     (primeOf get a) match {
       case Some(p) => p
       case None => {
@@ -45,8 +41,6 @@ trait PrimeTable[A] {
     }
   }
 }
-
-
 
 
 /**

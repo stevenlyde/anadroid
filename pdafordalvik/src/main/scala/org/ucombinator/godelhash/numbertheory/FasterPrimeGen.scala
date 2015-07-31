@@ -1,30 +1,30 @@
 package org.ucombinator.godelhash.numbertheory
 
 object FasterPrimeGen {
- 
 
- /* case class Cross(next: Int, incr: Int)
 
-def adjustCrosses(crosses: List[Cross], current: Int) = {
-  def nextIncr = crosses collect { 
-    case cross @ Cross(`current`, incr) => cross copy (next = current + incr)
-  }
+  /* case class Cross(next: Int, incr: Int)
 
-  def unchangedCrosses = crosses filter (_.next != current)
+ def adjustCrosses(crosses: List[Cross], current: Int) = {
+   def nextIncr = crosses collect {
+     case cross @ Cross(`current`, incr) => cross copy (next = current + incr)
+   }
 
-  nextIncr ::: unchangedCrosses
-}
+   def unchangedCrosses = crosses filter (_.next != current)
 
-def notPrime(crosses: List[Cross], current: Int) = crosses exists (_.next == current)
+   nextIncr ::: unchangedCrosses
+ }
 
-def sieve(s: Stream[Int], crosses: List[Cross]): Stream[Int] = {
-    val current #:: rest = s
+ def notPrime(crosses: List[Cross], current: Int) = crosses exists (_.next == current)
 
-    if (notPrime(crosses, current)) sieve(rest, adjustCrosses(crosses, current))
-    else current #:: sieve(rest, Cross(current * current, current) :: crosses)
-}
+ def sieve(s: Stream[Int], crosses: List[Cross]): Stream[Int] = {
+     val current #:: rest = s
 
-val primes = sieve(Stream from 2, Nil)*/
+     if (notPrime(crosses, current)) sieve(rest, adjustCrosses(crosses, current))
+     else current #:: sieve(rest, Cross(current * current, current) :: crosses)
+ }
+
+ val primes = sieve(Stream from 2, Nil)*/
 
   def sieve(s: Stream[Int]): Stream[Int] = {
     s.head #:: sieve(s.tail.filter(_ % s.head != 0))
@@ -34,10 +34,10 @@ val primes = sieve(Stream from 2, Nil)*/
   val primes = sieve(Stream.from(2))
 
 
-    def main(args: Array[String]) {
-      println(primes.take(100000).toList) //note that indexes are zero-based 
-      // shit quickly run out of memory!!!
-    }
+  def main(args: Array[String]) {
+    println(primes.take(100000).toList) //note that indexes are zero-based
+    // shit quickly run out of memory!!!
+  }
 
-   
+
 }

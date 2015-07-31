@@ -1,19 +1,19 @@
 package org.ucombinator.dalvik.vmrelated
 
-import scala.collection.immutable.{ Set => ImmSet, Map => ImmMap}
 import scala.collection.mutable.Map
 import scala.io.Source
 
-object APISpecs extends SimpleJVMClassReportParser{
+object APISpecs extends SimpleJVMClassReportParser {
 
   /**
    * Should be better read in!!!!
    * Oh, yeah...wait.
    */
- def main(args: Array[String]): Unit = {
-   readInReport
-   apiSpecTable.foreach(println)
- }
+  def main(args: Array[String]): Unit = {
+    readInReport
+    apiSpecTable.foreach(println)
+  }
+
   def EntryPointClassNames: List[String] = {
     List("android/app/Activity ",
       "android/app/Service",
@@ -73,71 +73,66 @@ object APISpecs extends SimpleJVMClassReportParser{
     pkgName: String,
     permissions: List[String],
     exceptionsThrown: List[String])
-    
-    /**
-     * This will be built up when parsing in the API file
-     */
+
+  /**
+   * This will be built up when parsing in the API file
+   */
   val apiSpecTable: Map[String, APIDesc] = Map.empty
-  
-  def readInReport{
+
+  def readInReport {
     val lines = Source.fromFile("data/jvm_class_report.txt").getLines()
-  
+
     lines.foreach(parseLine)
     setTempApi
   }
-  
 
-  def addAPIEntry( 
-      apiName: String,
-      special: Boolean,
+
+  def addAPIEntry(
+    apiName: String,
+    special: Boolean,
     retType: String,
     argTypes: List[String],
     clsName: String,
     pkgName: String,
     permissions: List[String],
     exceptionsThrown: List[String]) {
-    
-    val apiDesc = APIDesc(apiName,special, retType, argTypes, clsName, pkgName, permissions, exceptionsThrown)
+
+    val apiDesc = APIDesc(apiName, special, retType, argTypes, clsName, pkgName, permissions, exceptionsThrown)
     apiSpecTable += (apiName -> apiDesc)
   }
-  
+
   // temp use
   def setTempApi {
     addAPIEntry("java/io/FileInputStream/<init>", false, "", List("(object java/lang/String)"), "java/io/FileInputStream", "not known",
-        List(), List("java/io/FileNotFoundException"))
+      List(), List("java/io/FileNotFoundException"))
   }
-  
-  def getAPIExns(apiName: String) : List[String] = {
+
+  def getAPIExns(apiName: String): List[String] = {
     val apiDescO = apiSpecTable.get(apiName)
-    apiDescO match{
-      case Some(ad) =>{
+    apiDescO match {
+      case Some(ad) => {
         ad.exceptionsThrown
       }
-      case  None => { List()}
+      case None => List()
     }
   }
-  
-  def isInAPISpecsNameAndArgTypes(callName: String, argTypes: List[String]) : Boolean = {
-     val apiDescO = apiSpecTable.get(callName)
-    apiDescO match{
-      case Some(ad) =>{
+
+  def isInAPISpecsNameAndArgTypes(callName: String, argTypes: List[String]): Boolean = {
+    val apiDescO = apiSpecTable.get(callName)
+    apiDescO match {
+      case Some(ad) => {
         ad.argTypes == argTypes
       }
-      case  None => { false}
-    }  
+      case None => false
+    }
   }
-  
-  def isInAPISpecsbyName(callName: String) : Boolean = {
-     val apiDescO = apiSpecTable.get(callName)
-    apiDescO match{
-      case Some(ad) =>{
-        true
-      }
-      case  None => { false}
-    }  
+
+  def isInAPISpecsbyName(callName: String): Boolean = {
+    val apiDescO = apiSpecTable.get(callName)
+    apiDescO match {
+      case Some(ad) => true
+      case None => false
+    }
   }
-  
-  
-  
 
 }
