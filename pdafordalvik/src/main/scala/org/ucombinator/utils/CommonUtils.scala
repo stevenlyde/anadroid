@@ -579,8 +579,8 @@ object CommonUtils {
   }
 
   def deepFiles(f: File): Iterator[File] = {
-    val files = f.listFiles.iterator
-    files ++ files.filter(_.isDirectory).flatMap(deepFiles)
+    val files = f.listFiles
+    files.iterator.filter(_.isFile) ++ files.filter(_.isDirectory).flatMap(deepFiles)
   }
 
 }
